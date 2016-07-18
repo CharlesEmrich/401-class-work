@@ -1,16 +1,14 @@
 const http = require('http');
 const url = require('url');
-const router = require('./router'); //Provided code doesn't work without this?
 
-function start() {
+function start(route, handle) {
   function onRequest(request, response) {
     var pathname = url.parse(request.url).pathname;
     console.log('Request Receivef For: ' + pathname);
 
-    router.route(pathname); //This needed router. to run.
-
+    route(handle, pathname);
     response.writeHead(200, {'Content-Type': 'text/plain'});
-    // response.write('<p>Hello World</p>');
+    response.write('<p>Hello World</p>');
     response.end();
   }
 

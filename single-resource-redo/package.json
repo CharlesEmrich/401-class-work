@@ -1,0 +1,21 @@
+{
+  "name": "single-resource-redo",
+  "version": "1.0.0",
+  "description": "TODO: Write a project description",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Charles Emrich <charles.emrich@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "jsonwebtoken": "^7.1.7",
+    "mongoose": "^4.5.8",
+    "morgan": "^1.7.0"
+  }
+}

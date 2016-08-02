@@ -19,10 +19,12 @@ module.exports = router
     User.findOne({name: req.body.name})
     .then((user) => {
       if (!user) {
-        res.json({success: false, message: 'Authentication failed. No such user.'});
+
+        next({status: 403, message: 'Authentication failed. No such user.'});
       } else if (user) {
         if (user.password != req.body.password) {
-          res.json({success: false, message: 'Authentication failed. Wrong password.'});
+
+          next({status: 403, message: 'Authentication failed. Wrong password.'});
         } else {
           //We're here if the user exists and password is correct.
           //So, let's make a token.

@@ -7,7 +7,7 @@ module.exports = function getAuth() {
     if (token) {
       jwt.verify(token, process.env.secret, (err, decoded) => {
         if (err) {
-          return res.json({success: false, message: 'Authentication failed. Token invalid.'});
+          next({status: 403, message: 'Authentication failed. Token invalid.'});
         } else {
           //If authentication passes, save to request for use in other routes.
           req.decoded = decoded;
@@ -16,7 +16,7 @@ module.exports = function getAuth() {
       });
     } else {
       //We're here if no token was passed to a protected route.
-      return res.status(403).send({success: false, message: 'No token passed.'});
+      next({status: 403, message: 'No token passed.'});
     }
   };
 };

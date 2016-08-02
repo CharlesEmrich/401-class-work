@@ -4,9 +4,6 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 
-const jwt = require('jsonwebtoken');
-const config = ('./config');
-
 //Models
 const User = require('./models/user');
 
@@ -15,7 +12,6 @@ const users = require('./routes/users');
 
 //Configure the server
 require('./mongoose-setup');
-app.set('secret', config.secret);
 
 //Use the body-parser
 app.use(bodyParser.urlencoded({extended: false}));

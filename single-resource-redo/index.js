@@ -1,3 +1,4 @@
+require('dotenv').config();
 const app = require('./lib/server');
 
 const port = process.env.port || 8080;

@@ -6,7 +6,12 @@ const mongoose = require('mongoose');
 
 const jwt = require('jsonwebtoken');
 const config = ('./config');
+
+//Models
 const User = require('./models/user');
+
+//Routes
+const users = require('./routes/users');
 
 //Configure the server
 require('./mongoose-setup');
@@ -20,9 +25,28 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 //Routing
+
+app.use('/users', users);
+
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+//Create sample User
+app.get('/setup', (req, res) => {
+  var john = new User({
+    name: 'John Smith',
+    password: 'secret',
+    admin: true
+  });
+
+  john.save()
+  .then(() => {
+    res.json({ success: true});
+  })
+  .catch((err) => {
+    if (err) throw err;
+  });
+});
 
 module.exports = app;

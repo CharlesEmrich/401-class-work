@@ -37,7 +37,8 @@ module.exports = router
       }
       return book;
     })
-    .then((book) => {res.json(book);});
+    .then((book) => {res.json(book);})
+    .catch(next);
   })
   //Update existing
   .put('/:id', authenticate, (req, res, next) => {

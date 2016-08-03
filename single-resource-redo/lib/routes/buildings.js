@@ -11,7 +11,11 @@ const router = express.Router();
 module.exports = router
 
   //Get all
-
+  .get('/', authenticate, (req, res, next) => {
+    Building.find({})
+    .then((users) => {res.json(users);})
+    .catch(next);
+  });
   //Get one
 
   //Post new

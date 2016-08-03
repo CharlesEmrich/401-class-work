@@ -5,7 +5,9 @@ const jwt = require('jsonwebtoken');
 
 const Book = require('../models/book');
 const Building = require('../models/building');
+
 const authenticate = require('../auth/authenticate')();
+const checkAdmin = require('../auth/authAdmin')('admin');
 
 const router = express.Router();
 
@@ -48,7 +50,7 @@ module.exports = router
   })
   //Delete one
   //TODO: Stick this route behind role verification.
-  .delete('/:id', authenticate, (req, res, next) => {
+  .delete('/:id', authenticate, checkAdmin, (req, res, next) => {
     Book.findByIdAndRemove(req.params.id)
     .then(deleted => {res.json(deleted);})
     .catch(next);

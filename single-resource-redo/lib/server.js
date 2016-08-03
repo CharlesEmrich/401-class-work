@@ -5,10 +5,12 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 
 //Models
-const User = require('./models/user');
+const User = require('./models/user'); //Only /setup uses this atm.
 
 //Routes
 const users = require('./routes/users');
+const books = require('./routes/books');
+const buildings = require('./routes/buildings');
 
 //Configure the server
 require('./mongoose-setup');
@@ -21,14 +23,12 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 //Routing
-
 app.use('/users', users);
-
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+app.use('/books', books);
+app.use('/buildings', buildings);
 
 //Create sample User
+//Probably migrate this to user routes?
 app.get('/setup', (req, res) => {
   var john = new User({
     name: 'John Smith',

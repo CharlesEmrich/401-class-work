@@ -4,6 +4,7 @@ const bodyParser = require( 'body-parser' );
 const jwt = require('jsonwebtoken');
 
 const Book = require('../models/book');
+const Building = require('../models/building');
 const authenticate = require('../auth/authenticate')();
 
 const router = express.Router();
@@ -25,15 +26,16 @@ module.exports = router
   //Post new
   .post('/', authenticate, (req, res, next) => {
     new Book(req.body).save()
+    //if new Book had a buildingId, add it to the book list of the appropriate building
     .then((book) => {
-      if (result.buildingId) {
-        Building.findById(result.buildingId)
+      if (book.buildingId) {
+        Building.findById(book.buildingId)
         .then((building) => {
           building.books.push(book._id);
           building.save();
         });
       }
-      return result;
+      return book;
     })
     .then((book) => {res.json(book);});
   })

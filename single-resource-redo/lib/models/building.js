@@ -8,10 +8,10 @@ const building = new Schema({
     type: String,
     required: true
   },
-  books: {
-    type: [Schema.Types.ObjectId],
+  books: [{
+    type: Schema.Types.ObjectId,
     ref: 'Book'
-  }
+  }]
 });
 
 module.exports = mongoose.model('Building', building);

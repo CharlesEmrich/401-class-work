@@ -25,6 +25,16 @@ module.exports = router
   //Post new
   .post('/', authenticate, (req, res, next) => {
     new Book(req.body).save()
+    .then((book) => {
+      if (result.buildingId) {
+        Building.findById(result.buildingId)
+        .then((building) => {
+          building.books.push(book._id);
+          building.save();
+        });
+      }
+      return result;
+    })
     .then((book) => {res.json(book);});
   })
   //Update existing

@@ -2,6 +2,8 @@ const express = require( 'express' );
 const mongoose = require('mongoose');
 const bodyParser = require( 'body-parser' );
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const salt = bcrypt.genSaltSync(10);
 
 const User = require('../models/user');
 const authenticate = require('../auth/authenticate')();
@@ -15,6 +17,49 @@ module.exports = router
     .then((users) => {res.json(users);})
     .catch(next);
   })
+
+  .post('/signup', (req, res, next) => {
+    const {username, password} = req.body; //How does this work?
+    delete req.body.password;
+
+    if (username == null || password == null) {
+      return next({status: 400, message: 'Username and password must both be supplied.'});
+    }
+
+    //Check if User already exists.
+    User.find({username})
+    .count()
+    .then((count) => { //Classwork used count. Why can't I omit count and use if(user)?
+      if (count > 0) return next({status: 400, message: `Username ${username} in use.`});
+
+      const user = new User(req.body);
+      user.password = bcrypt.hashSync(password, salt);
+      return user.save();
+    })
+    //TODO: move requestToken into a .then here.
+    .then((user) => {res.send(user);})
+    .catch(next);
+  })
+
+  .post('/signin', (req, res, next) => {
+    const {username, password} = req.body; //How does this work?
+    delete req.body.password;
+
+    if (username == null || password == null) {
+      return next({status: 400, message: 'Username and password must both be supplied.'});
+    }
+
+    User.findOne({username})
+    .then((user) => {
+      if (!user || !bcrypt.compareSync(password, user.password)) {
+        return next({staus: 400, message: 'Username or password incorrect.'});
+      }
+      return user;
+    })
+    //TODO: send back a token.
+    .catch(next);
+  })
+
   .post('/requestToken', (req, res, next) => {
     User.findOne({name: req.body.name})
     .then((user) => {

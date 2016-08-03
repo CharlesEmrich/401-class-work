@@ -19,7 +19,7 @@ module.exports = router
   //Get one (including contents)
   .get('/:id', authenticate, (req, res, next) => {
     Building.findById({_id: req.params.id})
-  .populate('books').lean() //Anytime you're doing a get, this will be OK.
+    .populate('books').lean() //Anytime you're doing a get, this will be OK.
     .then((building) => {res.json(building);})
     .catch(next);
   })
